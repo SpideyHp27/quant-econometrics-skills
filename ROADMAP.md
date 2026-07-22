@@ -34,9 +34,12 @@ Versioning: `plugin.json` minor version = number of skills in the jar (0.2.0 = 2
 
 ---
 
+## Visual layer (owner: "seeing something running is better than anything")
+A **local validation dashboard** (`dashboard/`, served at `localhost:8000`) renders every skill's real output so caveats are eyeballable, not buried in text. `build_data.py` runs the skills → `data.json`; `index.html` (self-contained, dark/neon, vanilla SVG) draws skill cards, the GARCH equity chart (buy&hold vs vol-targeted), the pairs cointegration heatmap (green/amber/red like an assets heatmap), and a caveats panel. Re-run `build_data.py` to refresh. **This is v1** — the roadmap (inspired by owner's reference dashboards) is a richer always-on surface: a live "matrix" of configs being swept, per-arm trade tape, holdout/exam watch, and a discretion-trainer. Built incrementally alongside the skills.
+
 ## Build log
 
-### 2026-07-22 — repo created + skills 1–2 landed
+### 2026-07-22 — repo created + skills 1–2 + local dashboard
 - **Repo scaffolded** exact-kind to garchmethod: `.claude-plugin/` marketplace + plugin manifests, MIT `LICENSE`, `README.md`, `requirements.txt`, this journal. Installable via `/plugin marketplace add SpideyHp27/quant-econometrics-skills`.
 - **Skill 1 — garch-volatility** (migrated in; originally built 2026-07-22 in the main session). GARCH(1,1) walk-forward vol forecast → regime → vol-target size. Proven earlier on real NQ: vol-targeting cut MaxDD **38.5% → 24.2%** with higher Sharpe. Refs: Engle 1982, Bollerslev 1986.
 - **Skill 2 — stationarity-tests** (new). ADF + KPSS + Phillips-Perron fused verdict, integration order `d`, Engle-Granger cointegration. Validated on **USTEC daily** (2150 bars, 2018→2026):

@@ -9,3 +9,4 @@ venv/
 forecast.csv
 out/
 .claude/
+dashboard/_cache/
