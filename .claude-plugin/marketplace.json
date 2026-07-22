@@ -1,0 +1,11 @@
+{
+  "name": "quant-econometrics-skills",
+  "owner": { "name": "Hoysala Prasad" },
+  "plugins": [
+    {
+      "name": "quant-econometrics",
+      "source": "./",
+      "description": "A growing jar of econometrics & time-series skills for quant trading research. Each skill turns a piece of the classic literature (Engle/Bollerslev GARCH, Dickey-Fuller, KPSS, Box-Jenkins, Engle-Granger) into a runnable, walk-forward, zero-lookahead tool — validated on real market data."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+*.png
+*.csv
+!skills/**/*.csv
+forecast.csv
+out/
+.claude/
