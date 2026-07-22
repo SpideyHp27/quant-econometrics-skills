@@ -34,14 +34,25 @@ series; this skill establishes that returns are stationary and price is not).
 - **Engle-Granger** (1987) — regress y on x, unit-root the spread; stationary spread ⇒ cointegrated ⇒ tradeable
   pair, with the OLS hedge ratio returned.
 
-## How to run
+## How to run — diagnostic
 ```bash
 uv run scripts/stationarity.py --csv data/ustec/USTEC_D1.csv
-uv run scripts/stationarity.py --csv A.csv --coint B.parquet    # pairs test
+uv run scripts/stationarity.py --csv A.csv --coint B.parquet    # cointegration screen
 uv run scripts/stationarity.py --csv prices.csv --json
 ```
 Handles the project's `date,time,…` MT5 exports and the Databento parquets. Import for pipelines:
 `combined_verdict(series)`, `integration_order(prices)`, `cointegration(y, x)`.
+
+## How to run — FUNCTIONAL: pairs / stat-arb backtest
+Cointegration is not a verdict, it's a **trade**. `pairs_backtest.py` turns the screen into a market-neutral
+strategy and **proves the P&L** (the equivalent of the GARCH skill's `compare.py`): trailing-window hedge ratio →
+walk-forward spread z-score → long/short the spread → Sharpe / PF / MaxDD / CAGR, costs modeled, zero look-ahead.
+```bash
+uv run scripts/pairs_backtest.py --y YM.parquet --x ES.parquet
+uv run scripts/pairs_backtest.py --y A.csv --x B.csv --entry 2 --exit 0.5 --stop 4 --win 60 --json
+```
+Signal: `z > +entry` short the spread, `z < -entry` long it, `|z| < exit` flat, `|z| > stop` bail. The screen
+**gates** the backtest — trade only pairs that pass cointegration, or you are curve-fitting noise (proven below).
 
 ## How it plugs into the research
 - **MeanRev_NDX reality check** — USTEC price is **I(1)**; the strategy reverts to a moving SMA, not a stationary

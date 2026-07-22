@@ -45,8 +45,22 @@ The gate between a real edge and a statistical mirage:
 
 **Finding:** USTEC price carries a unit root — it is **I(1)**, a random walk with drift. This is the MeanRev_NDX forensic conclusion made formal: the live strategy is **not** reverting to a stationary level, it is leveraged bull-beta. Cointegration vs NQ is the expected sanity check — same underlying, hedge ratio ≈ 1.00, spread stationary.
 
+## Functional payoff — pairs / stat-arb backtest (`pairs_backtest.py`)
+The diagnostic earns its keep by driving a real strategy. `pairs_backtest.py` builds a market-neutral spread trade (trailing-window hedge ratio → walk-forward z-score → long/short spread), models costs, and reports honest P&L — zero look-ahead. Screened + backtested across 6 pairs (futures = Databento daily 2018→26; ETFs = yfinance 2012→26):
+
+| Pair | Coint p | Backtest Sharpe | PF | Verdict |
+|---|---:|---:|---:|---|
+| YM ~ ES (Dow/S&P) | **0.0065** ✓ | +0.26 | 1.16 | cointegrated but marginal (no robust plateau) |
+| GLD ~ GDX (gold/miners) | 0.062 ~ | +0.37 | 1.24 | borderline, best of the set — still sub-gate |
+| ES ~ NQ | 0.21 | −0.28 | 0.84 | not cointegrated → loses |
+| GC ~ SI (gold/silver) | 0.25 | −0.82 | 0.53 | not cointegrated → loses badly (61% DD) |
+| EWA ~ EWC (Chan's pair) | 0.47 | −0.37 | 0.81 | decoupled post-2015 → loses |
+| KO ~ PEP | 0.91 | −0.02 | 0.98 | not cointegrated → flat |
+
+**Finding (honest):** the cointegration screen is **predictive of tradeability** — the only two pairs with PF>1 are the only two that (borderline-)cointegrated; every clearly-non-cointegrated pair loses money. That is the screen doing its job as a filter. **But no pair clears the deploy gate (Sharpe ≥ 1.0):** static-cointegration daily pairs on liquid instruments are marginal-to-null. The famous textbook pairs (EWA/EWC) held only over their original windows and have since drifted out of cointegration — a real lesson in relationship non-stationarity, not a tooling failure. The tool's value is that it **proves this honestly and refuses to over-trade** — a reusable stat-arb generator + built-in honesty gate for richer universes (sector baskets, crypto, intraday) where cointegrated pairs are denser.
+
 ## Caveat
-Stationarity is necessary, not sufficient. A stationary spread can be too small to trade after costs, and cointegration can break on regime change. The tool says *whether a mean exists*; it does not size the trade.
+Stationarity is necessary, not sufficient. A stationary spread can be too small to trade after costs, and cointegration itself drifts (the relationships are non-stationary — see EWA/EWC above). The tool says *whether a mean exists and whether trading it paid*; it does not promise the relationship persists out of sample.
 
 ## Files
 - `../../scripts/stationarity.py` — tool (`--coint`, `--json`; importable `combined_verdict` / `integration_order` / `cointegration`).

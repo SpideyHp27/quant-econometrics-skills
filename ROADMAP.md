@@ -23,11 +23,14 @@ Turn a graduate econometrics course + the seminal papers into a **jar of runnabl
 Versioning: `plugin.json` minor version = number of skills in the jar (0.2.0 = 2 built). Bumps by one per skill.
 
 ## Per-skill loop (repeated for every skill)
+**The bar (non-negotiable): a skill is FUNCTIONAL like GARCH, not a doc wrapper around a test.** GARCH is functional because it closes the loop — forecast → sizing *decision* → a proof harness (`compare.py`) that shows real P&L impact (cut MaxDD 38.5%→24.2%). Every skill here must do the same: produce a **decision/signal** AND ship a **proof harness** that backtests it on real money — and reports the null honestly when there is no edge.
+
 1. Read the KB hub + atoms; pull the seminal paper(s); research where it adds value.
 2. Build the tool on the reference library (`statsmodels`/`arch`/`scipy`), walk-forward, `--json`, PEP 723 deps.
-3. Validate on real data; capture the exact numbers.
-4. Write `SKILL.md` (auto-trigger description + "how it plugs into the research") + `REPORT.md` (what it does, what it does for the research, validation numbers, caveat, references).
-5. Commit + push. Journal it here.
+3. **Build the functional output + proof harness** (a backtest / decision, not just a verdict).
+4. Validate on real data; capture the exact numbers — positive edge OR honest null.
+5. Write `SKILL.md` (auto-trigger description + "how it plugs into the research") + `REPORT.md` (what it does, what it does for the research, validation numbers, caveat, references).
+6. Commit + push. Journal it here.
 
 ---
 
@@ -36,13 +39,18 @@ Versioning: `plugin.json` minor version = number of skills in the jar (0.2.0 = 2
 ### 2026-07-22 — repo created + skills 1–2 landed
 - **Repo scaffolded** exact-kind to garchmethod: `.claude-plugin/` marketplace + plugin manifests, MIT `LICENSE`, `README.md`, `requirements.txt`, this journal. Installable via `/plugin marketplace add SpideyHp27/quant-econometrics-skills`.
 - **Skill 1 — garch-volatility** (migrated in; originally built 2026-07-22 in the main session). GARCH(1,1) walk-forward vol forecast → regime → vol-target size. Proven earlier on real NQ: vol-targeting cut MaxDD **38.5% → 24.2%** with higher Sharpe. Refs: Engle 1982, Bollerslev 1986.
-- **Skill 2 — stationarity-tests** (new). ADF + KPSS + Phillips-Perron fused into one verdict, integration order `d`, Engle-Granger cointegration. Validated on **USTEC daily** (2150 bars, 2018→2026):
+- **Skill 2 — stationarity-tests** (new). ADF + KPSS + Phillips-Perron fused verdict, integration order `d`, Engle-Granger cointegration. Validated on **USTEC daily** (2150 bars, 2018→2026):
   - Price = **I(1), non-stationary** (ADF p=0.99, KPSS p=0.01, PP p=0.99 — all agree). **This is the MeanRev_NDX forensic made formal: the live strategy is not reverting to a level, it's leveraged bull-beta.**
-  - Log-returns = **I(0), stationary** (all three agree). Integration order **d=1**.
-  - **USTEC ~ NQ cointegrated** (p=0.0000, hedge ratio 0.99) — same underlying, spread tradeable (sanity check).
-  - Refs: Dickey & Fuller 1979, KPSS 1992, Phillips & Perron 1988, Engle & Granger 1987, Granger & Newbold 1974 (spurious regression).
+  - Log-returns = **I(0), stationary** (all three agree). Integration order **d=1**. USTEC~NQ cointegrated (p=0.0000, hedge 0.99 — same-underlying sanity check).
+- **Skill 2 FUNCTIONAL upgrade — `pairs_backtest.py`** (this is what makes it a working skill, not a diagnostic). Walk-forward market-neutral spread reversion, costs modeled, zero look-ahead. Screened + backtested 6 pairs:
+  - **Cointegration screen is PREDICTIVE:** the only 2 pairs with PF>1 (YM~ES p=0.0065 → PF 1.16; GLD~GDX p=0.062 → PF 1.24) are the only 2 that (borderline-)cointegrated; every clearly-non-cointegrated pair (ES~NQ, GC~SI, EWA~EWC, KO~PEP) loses money. The filter works.
+  - **Honest null:** no pair clears Sharpe≥1 — static-cointegration daily pairs on liquid instruments are marginal-to-dead. Textbook EWA/EWC has drifted out of cointegration since its original window (relationship non-stationarity). Not fabricating an edge that isn't robust — that's the overfitting this project rejects. The tool's worth = it proves this honestly + refuses to over-trade; hunt richer universes (sector baskets, crypto, intraday).
+  - Refs: Dickey & Fuller 1979, KPSS 1992, Phillips & Perron 1988, Engle & Granger 1987, Granger & Newbold 1974.
 
 ---
 
 ## Next
-- **Skill 3 — arima-forecast** (Box-Jenkins): auto (p,d,q) via AIC/BIC + ACF/PACF, walk-forward k-step forecast + intervals, Ljung-Box residual white-noise check. Consumes `d` from skill 2. Validate on NQ/USTEC daily returns; compare naive vs ARIMA forecast error (honest, out-of-sample).
+Functional-first, honest about edge vs null. Two tracks:
+- **Best shot at a demonstrable POSITIVE edge → `ts-decomposition` / seasonality** (skill 4, may pull forward). Turn-of-month + day-of-week effects in equity indices are among the most robust anomalies; a seasonality extractor + backtest is the likeliest GARCH-style "it makes money" win. Prioritize if we want a clear positive on the board.
+- **`arima-forecast`** (skill 3, Box-Jenkins): auto (p,d,q) via AIC/BIC + ACF/PACF, walk-forward k-step forecast + intervals, Ljung-Box residual check. Functional harness = forecast-driven signal backtest vs random-walk benchmark + directional-accuracy. Expect a likely null (markets ≈ efficient) but proven honestly. Consumes `d` from skill 2.
+- **`randomness-tests`** (skill 6): Ljung-Box + Lo-MacKinlay variance ratio as a **strategy selector** (momentum vs reversion vs noise) — a functional gate that kills white-noise strategies. Strong positive-utility candidate.
