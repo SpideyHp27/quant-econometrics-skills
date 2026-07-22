@@ -39,6 +39,18 @@ A **local validation dashboard** (`dashboard/`, served at `localhost:8000`) rend
 
 ## Build log
 
+### 2026-07-22 (later) — skill 3: swarm-optimizer (v0.3.0)
+- **swarm-optimizer** — PSO portfolio weights + anti-overfit gauntlet (train/test wall, DSR charged for
+  all ~4,840 trials, equal-weight benchmark with an honest "use equal weight" verdict path, iterative
+  simplex projection for the concentration cap). Origin: owner's swarm-intelligence article; assessment:
+  PSO is real value here for exactly one job — bundle weights — and only caged.
+- Validated on the REAL 7-strategy Pella bundle (2018→2026, 2,172 days): PSO test Sharpe **2.95 vs
+  equal-weight 2.03**, DSR 1.00 vs luck-bar 0.54 → machinery validated at the weights level.
+- **The tool demonstrated its own caveat on real data:** it max-capped TT_NDX — beautiful backtest,
+  but live it produced a single −14.75% swing-tail day. Daily-P&L Sharpe can't see intraday tails →
+  output is a proposal for the human + portfolio-MC, never a deploy order. Correctly zeroed the two
+  weakest sleeves.
+
 ### 2026-07-22 — repo created + skills 1–2 + local dashboard
 - **Repo scaffolded** exact-kind to garchmethod: `.claude-plugin/` marketplace + plugin manifests, MIT `LICENSE`, `README.md`, `requirements.txt`, this journal. Installable via `/plugin marketplace add SpideyHp27/quant-econometrics-skills`.
 - **Skill 1 — garch-volatility** (migrated in; originally built 2026-07-22 in the main session). GARCH(1,1) walk-forward vol forecast → regime → vol-target size. Proven earlier on real NQ: vol-targeting cut MaxDD **38.5% → 24.2%** with higher Sharpe. Refs: Engle 1982, Bollerslev 1986.
