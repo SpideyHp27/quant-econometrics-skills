@@ -39,6 +39,20 @@ A **local validation dashboard** (`dashboard/`, served at `localhost:8000`) rend
 
 ## Build log
 
+### 2026-07-23 (later) — skills 5-7 + THE SELF-AUDIT (v0.7.0) — THE JAR IS COMPLETE
+- **arima-forecast** — train-only order selection, walk-forward vs the random walk, sign-harness.
+  Real NQ: honest null (skill +0.44%, dir 52.8%) — verdict held the line. Synthetic AR(1): +30.1% skill.
+- **regression-diagnostics** — full Gauss-Markov battery + naive-vs-HAC verdict column. Real finding:
+  NQ_ret ~ ES_ret(lag1) beta −0.172 SURVIVES HAC (p=.0028) — cross-serial reversion lead.
+- **randomness-tests** — LB + robust VR + runs + vol-clustering, archetype selector. Real NQ:
+  daily = reversion-flavored (VR2 0.874), 15m mean ~dead, vol clusters everywhere — recovered the
+  program's hard-won map in one pass.
+- **accuracy_audit.py + AUDIT.md** — every skill vs planted synthetic truths + false-positive
+  controls: **22/22 PASS**. The audit caught 3 real bugs pre-release (VIF numpy path, PSO cap
+  inflation → exact water-filling projection, ARIMA append on gapped calendars). Timings: everything
+  <2s except ARIMA walk-forward (30-40s).
+
+
 ### 2026-07-23 — skill 4: ts-decomposition (v0.4.0)
 - **ts-decomposition** — STL decomposition with a **shuffled-null calibration** (STL finds a 31.5%
   pseudo-seasonal share in a pure random walk — the null exposes it; NQ real excess = 0.3% = no cycle),

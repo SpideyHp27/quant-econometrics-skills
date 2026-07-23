@@ -83,16 +83,25 @@ def dsr(sr_test, n_obs, trial_srs, ret_test):
 
 
 def project(w, wmax):
-    """Project onto {w >= 0, w <= wmax, sum w = 1}. Iterate clip->renormalize (renormalizing can
-    push elements back above the cap, so loop; converges in a few passes)."""
-    w = np.asarray(w, float)
-    for _ in range(8):
-        w = np.clip(w, 0.0, wmax)
-        t = w.sum()
-        w = w / t if t > 0 else np.full_like(w, 1.0 / len(w))
-        if w.max() <= wmax + 1e-9:
+    """Exact projection onto {w>=0, w<=wmax, sum=1}: normalize, then iteratively FREEZE any
+    entry at the cap (frozen entries leave the pool permanently) and scale the rest to absorb
+    the excess. Each pass freezes >=1 entry -> converges in <=n passes, cap exact."""
+    w = np.clip(np.asarray(w, float), 0.0, None)
+    s = w.sum()
+    w = w / s if s > 0 else np.full_like(w, 1.0 / len(w))
+    active = np.ones(len(w), bool)
+    for _ in range(len(w)):
+        if not (w > wmax + 1e-12).any():
             break
-    return np.clip(w, 0.0, wmax) / max(np.clip(w, 0.0, wmax).sum(), 1e-12)
+        over = active & (w >= wmax - 1e-12)
+        excess = float((w[over] - wmax).sum())
+        w[over] = wmax
+        active &= ~over
+        pool = float(w[active].sum())
+        if pool <= 0:
+            break                                       # cap infeasible (n*wmax < 1) — leave capped
+        w[active] *= (pool + excess) / pool
+    return w
 
 
 def pso(train, wmax, particles, iters, lam_dd, seed):

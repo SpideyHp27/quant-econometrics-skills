@@ -28,12 +28,12 @@ Each skill is self-describing (`skills/<name>/SKILL.md`), has a runnable tool (`
 | 1 | **garch-volatility** | How violent is tomorrow, and how big should I size? | GARCH(1,1) — Engle 1982, Bollerslev 1986 (Nobel 2003) | ✅ built |
 | 2 | **stationarity-tests** | Is this mean-reverting or a random walk? Are these two a tradeable pair? | ADF (Dickey-Fuller 1979), KPSS 1992, Phillips-Perron 1988, Engle-Granger 1987 | ✅ built |
 | 3 | **swarm-optimizer** | How do I weight a bundle of strategies — without the optimizer overfitting? | PSO (Kennedy & Eberhart 1995) + Deflated Sharpe (Bailey & LdP 2014) | ✅ built |
-| 4 | **arima-forecast** | What's the model-based forecast of the next moves? | Box-Jenkins ARIMA (Box & Jenkins 1970) | ⏳ planned |
+| 4 | **arima-forecast** | What's the model-based forecast of the next moves? | Box-Jenkins ARIMA (Box & Jenkins 1970) | ✅ built |
 | 5 | **ts-decomposition** | What's trend vs seasonal vs noise? Is there a calendar edge? | STL (null-calibrated) + French 1980 / Ariel 1987 calendar cells | ✅ built |
-| 6 | **regression-diagnostics** | Is this regression edge real, or does it break its own assumptions? | OLS + Gauss-Markov battery, HAC/Newey-West, Chow | ⏳ planned |
-| 7 | **randomness-tests** | Is there ANY exploitable structure, or is this white noise? | Ljung-Box portmanteau, runs, turning-points | ⏳ planned |
+| 6 | **regression-diagnostics** | Is this regression edge real, or does it break its own assumptions? | OLS + Gauss-Markov battery, HAC/Newey-West, Chow | ✅ built |
+| 7 | **randomness-tests** | Is there ANY exploitable structure, or is this white noise? | Ljung-Box, Lo-MacKinlay VR, runs | ✅ built |
 
-See [`ROADMAP.md`](ROADMAP.md) for the build journal — what's done, what's next, and the exact validation numbers as each skill lands.
+**The jar audits itself:** [`AUDIT.md`](AUDIT.md) — every skill tested against planted synthetic ground truths (22/22 PASS) + timings. See [`ROADMAP.md`](ROADMAP.md) for the build journal — what's done, what's next, and the exact validation numbers as each skill lands.
 
 ## How they compose
 
