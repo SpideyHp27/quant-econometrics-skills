@@ -1,6 +1,8 @@
 {
   "name": "quant-econometrics",
-  "version": "0.3.0",
-  "description": "Econometrics & time-series toolkit as Claude Code skills. Each skill turns a piece of the classic literature (Engle/Bollerslev GARCH, Dickey-Fuller/KPSS/Phillips-Perron, Box-Jenkins ARIMA, Engle-Granger cointegration) into a runnable, walk-forward, zero-lookahead tool for trading research. Answers about volatility, stationarity, forecasting, and whether an edge exists at all — validated honestly on real market data.",
-  "author": { "name": "Hoysala Prasad" }
+  "version": "0.4.0",
+  "description": "Econometrics & time-series toolkit as Claude Code skills. Each skill turns a piece of the classic literature (Engle/Bollerslev GARCH, Dickey-Fuller/KPSS/Phillips-Perron, Box-Jenkins ARIMA, Engle-Granger cointegration) into a runnable, walk-forward, zero-lookahead tool for trading research. Answers about volatility, stationarity, forecasting, and whether an edge exists at all \u00e2\u20ac\u201d validated honestly on real market data.",
+  "author": {
+    "name": "Hoysala Prasad"
+  }
 }

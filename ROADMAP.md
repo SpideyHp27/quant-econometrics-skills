@@ -39,6 +39,16 @@ A **local validation dashboard** (`dashboard/`, served at `localhost:8000`) rend
 
 ## Build log
 
+### 2026-07-23 — skill 4: ts-decomposition (v0.4.0)
+- **ts-decomposition** — STL decomposition with a **shuffled-null calibration** (STL finds a 31.5%
+  pseudo-seasonal share in a pure random walk — the null exposes it; NQ real excess = 0.3% = no cycle),
+  all DOW/TOM calendar cells with HAC p, fixed-window TOM harness vs B&H with IS/OOS.
+- Validated on back-adjusted CME ES+NQ (1,661 sessions each): **TOM anomaly = HONEST NULL** (TOM days
+  earn less than non-TOM; harness OOS negative on both — the 1980s effect is arbed). **Monday = live
+  finding**: ES +15.4bp p=.0096, NQ +22.1bp p=.0011, independently significant both instruments —
+  flagged as weekend-hold-premium candidate, research lead NOT validated edge.
+
+
 ### 2026-07-22 (later) — skill 3: swarm-optimizer (v0.3.0)
 - **swarm-optimizer** — PSO portfolio weights + anti-overfit gauntlet (train/test wall, DSR charged for
   all ~4,840 trials, equal-weight benchmark with an honest "use equal weight" verdict path, iterative
